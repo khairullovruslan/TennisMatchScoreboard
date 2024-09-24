@@ -1,53 +1,42 @@
-<%@ page import="java.util.List" %>
 <%@ page import="org.tomato.tennismatchscoreboardweb.models.Match" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 
+<!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>Recent matches</title>
-    <link rel="stylesheet" href="style.css">
+    <title>TENNIS</title>
 </head>
 <body>
-<div class="nav">
-    <a href="/tennis">Tennis scoreboard</a>
-    <a href="new-match">New match</a>
-    <a class="current" href="matches">Recent matches</a>
-    <div class="search-container">
-        <form action="matches" method="get" name="playerfilter">
-            <input type="text" placeholder="Player name..." name="filter_by_player_name">
-            <button type="submit">Find...</button>
-        </form>
-
+<div class="main_container">
+    <div class="header">
+        <h1>СЫГРАННЫЕ МАТЧИ</h1>
     </div>
-</div>
 
-<div class="content">
-    <h1>Recent matches</h1>
+    <div class="matches_table">
 
-    <table class="info">
-        <tr>
-            <th>Player1</th>
-            <th>Player2</th>
-            <th>Winner</th>
-        </tr>
-        <c:forEach var="match" items="${matches}">
+
+        <table>
             <tr>
-                <td>${match.getPlayer1().getName()}</td>
-                <td>${match.getPlayer2().getName()}</td>
-                <td>${match.getWinner().getName()}</td>
+                <th>Игрок #1</th>
+                <th>Игрок #2</th>
+
             </tr>
-        </c:forEach>
-    </table>
+            <% List<Match> matches = (List<Match>) request.getAttribute("matches"); %>
+
+            <% for (Match match : matches) { %>
+            <tr>
+                <td><%= match.getPlayer1().getName() %>
+                    <%= match.getWinner().getName().equals(match.getPlayer1().getName()) ? "✔" : "" %></td>
+                <td><%= match.getPlayer2().getName() %>
+                    <%= match.getWinner().getName().equals(match.getPlayer2().getName()) ? "✔" : "" %></td>
+            </tr>
+            <% } %>
+        </table>
+    </div>
 
 
 </div>
-<div class="footer">
-    <p>footer</p>
-</div>
-
-
-
 </body>
 </html>
