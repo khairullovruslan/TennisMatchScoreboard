@@ -5,14 +5,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.tomato.tennismatchscoreboardweb.controllers.MatchGeneratorController;
+import org.tomato.tennismatchscoreboardweb.services.PlayerService;
 
 import java.io.IOException;
 import java.util.UUID;
 
 @WebServlet("/new-match")
 public class NewMatchServlet extends HttpServlet {
-    MatchGeneratorController matchGeneratorController = new MatchGeneratorController();
+    private  final PlayerService playerService = new PlayerService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,7 +30,7 @@ public class NewMatchServlet extends HttpServlet {
         if (name1.equals(name2)){
             resp.sendError(400, "Имена игроков одинаковые!");
         }
-        UUID uuid = matchGeneratorController.generateMatch(name1, name2);
-        resp.sendRedirect("/match-score?uuid=" + uuid);
+        UUID uuid = playerService.generateMatch(name1, name2);
+        resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + uuid);
     }
 }
