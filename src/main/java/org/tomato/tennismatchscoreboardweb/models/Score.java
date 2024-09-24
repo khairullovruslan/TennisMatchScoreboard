@@ -6,7 +6,12 @@ import lombok.Data;
 @Builder
 @Data
 public class Score {
-    private int firstScore;
-    private int secondScore;
+    private int countSets;
+
+    private int countGames;
+
+    private int points;
+
+
 
 }
