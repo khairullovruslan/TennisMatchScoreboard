@@ -15,7 +15,6 @@ public class PlayerDao implements BaseDao<Player> {
 
     @Override
     public Player save(Player entity, Session session) {
-        System.out.println("saving " + entity);
         session.persist(entity);
         return entity;
     }
@@ -27,8 +26,8 @@ public class PlayerDao implements BaseDao<Player> {
                 .uniqueResult();
     }
     public List<Player> findAll(){
-        try(  var sessionFactory = HibernateUtil.getSessionFactory();
-              var session = sessionFactory.openSession();) {
+        var sessionFactory = HibernateUtil.getSessionFactory();
+        try(var session = sessionFactory.openSession();) {
             var transaction = session.beginTransaction();
             List<Player> players = session.createQuery("select p from Player p ", Player.class).list();
             transaction.commit();
@@ -36,9 +35,6 @@ public class PlayerDao implements BaseDao<Player> {
             return players;
         }
 
-    }
-
-    public static void main(String[] args) {
     }
 
 

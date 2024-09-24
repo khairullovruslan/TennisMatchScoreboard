@@ -9,6 +9,7 @@ import org.tomato.tennismatchscoreboardweb.models.Score;
 import org.tomato.tennismatchscoreboardweb.util.HibernateUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class PlayerService {
@@ -16,9 +17,8 @@ public class PlayerService {
 
     public UUID generateMatch(String name1, String name2){
         Transaction transaction = null;
-
-        try (var sessionFactory = HibernateUtil.getSessionFactory();
-             var session = sessionFactory.openSession();){
+        var sessionFactory = HibernateUtil.getSessionFactory();
+        try (var session = sessionFactory.openSession();){
             transaction = session.beginTransaction();
 
             Player player1 = playerDao.findByName(name1, session);
@@ -31,11 +31,20 @@ public class PlayerService {
             }
 
             transaction.commit();
-            Score score = Score
+            Score score1 = Score
                     .builder()
-                    .firstScore(0)
-                    .secondScore(0)
+                    .countGames(0)
+                    .points(0)
+                    .countSets(0)
                     .build();
+
+            Score score2 = Score
+                    .builder()
+                    .countGames(0)
+                    .points(0)
+                    .countSets(0)
+                    .build();
+
             Match match = Match
                     .builder()
                     .player1(player1)
@@ -43,7 +52,8 @@ public class PlayerService {
             MatchScore matchScore = MatchScore
                     .builder()
                     .match(match)
-                    .score(score)
+                    .score1(score1)
+                    .score2(score2)
                     .build();
             UUID uuid = UUID.randomUUID();
             if (MatchScore.scores == null){
@@ -62,6 +72,10 @@ public class PlayerService {
         return null;
 
     }
+    public List<Player> playerList(){
+        return playerDao.findAll();
+    }
+
     private Player buildPlayer(String name){
         return Player
                 .builder()
