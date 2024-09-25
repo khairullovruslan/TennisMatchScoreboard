@@ -1,17 +1,12 @@
 package org.tomato.tennismatchscoreboardweb.services;
 
-import org.hibernate.Transaction;
 import org.tomato.tennismatchscoreboardweb.dao.PlayerDao;
 import org.tomato.tennismatchscoreboardweb.models.Match;
 import org.tomato.tennismatchscoreboardweb.models.MatchScore;
 import org.tomato.tennismatchscoreboardweb.models.Player;
 import org.tomato.tennismatchscoreboardweb.models.Score;
-import org.tomato.tennismatchscoreboardweb.util.HibernateUtil;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerService {
     private final PlayerDao playerDao = PlayerDao.getInstance();
@@ -29,24 +24,14 @@ public class PlayerService {
         Player player1 = buildPlayer(name1);
         Player player2 = buildPlayer(name2);
 
-        Score score1 = Score
-                .builder()
-                .countGames(0)
-                .points(0)
-                .countSets(0)
-                .build();
-
-        Score score2 = Score
-                .builder()
-                .countGames(0)
-                .points(0)
-                .countSets(0)
-                .build();
+        Score score1 = builderScore();
+        Score score2 = builderScore();
 
         Match match = Match
                 .builder()
                 .player1(player1)
                 .player2(player2).build();
+
         MatchScore matchScore = MatchScore
                 .builder()
                 .match(match)
@@ -60,6 +45,14 @@ public class PlayerService {
 
     }
 
+    private Score builderScore() {
+        return Score
+                .builder()
+                .countGames(0)
+                .points(0)
+                .countSets(0)
+                .build();
+    }
 
 
     private Player buildPlayer(String name) {
@@ -69,9 +62,7 @@ public class PlayerService {
                 .build();
         try {
             return playerDao.save(player);
-        }
-        catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
             return playerDao.findByName(name);
         }
     }
