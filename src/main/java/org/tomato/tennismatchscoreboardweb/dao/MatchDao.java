@@ -1,9 +1,7 @@
 package org.tomato.tennismatchscoreboardweb.dao;
 
-import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.tomato.tennismatchscoreboardweb.models.Match;
-import org.tomato.tennismatchscoreboardweb.models.Player;
 import org.tomato.tennismatchscoreboardweb.util.HibernateUtil;
 
 import java.util.List;
@@ -19,10 +17,7 @@ public class MatchDao implements BaseDao<Match> {
         return INSTANCE;
     }
 
-    @Override
-    public Match findById(long id, Session session) {
-        return null;
-    }
+
 
     public List<Match> findAll(int page, int pageSize) {
         var sessionFactory = HibernateUtil.getSessionFactory();
@@ -51,12 +46,13 @@ public class MatchDao implements BaseDao<Match> {
 
     }
 
+
     @Override
-    public Match save(Match entity, Session session) {
+    public Match findById(long id) {
         return null;
     }
 
-    public void save(Match entity) {
+    public Match save(Match entity) {
         var sessionFactory = HibernateUtil.getSessionFactory();
         try(
             var session = sessionFactory.openSession();) {
@@ -68,6 +64,7 @@ public class MatchDao implements BaseDao<Match> {
             e.printStackTrace();
             throw e;
         }
+        return entity;
     }
 
 }
