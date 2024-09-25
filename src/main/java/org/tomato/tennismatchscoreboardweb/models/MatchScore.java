@@ -15,17 +15,25 @@ public class MatchScore {
     private Score score2;
     private boolean isDop;
 
-    public static void addMatch(UUID uuid, MatchScore matchScore){
-        if (scores == null){
-            scores = new ConcurrentHashMap<>();
-        }
+    public static void addMatch(UUID uuid, MatchScore matchScore) {
+        checkedEmpty();
         scores.put(uuid, matchScore);
     }
-    public static MatchScore getMatch(UUID uuid){
+
+    public static MatchScore getMatch(UUID uuid) {
+        checkedEmpty();
         return scores.getOrDefault(uuid, null);
     }
-    public static void removeMatch(UUID uuid){
+
+    public static void removeMatch(UUID uuid) {
+        checkedEmpty();
         scores.remove(uuid);
+    }
+
+    private static void checkedEmpty() {
+        if (scores == null) {
+            scores = new ConcurrentHashMap<>();
+        }
     }
 
 
