@@ -13,5 +13,4 @@ public class Score {
     private int points;
 
 
-
 }
