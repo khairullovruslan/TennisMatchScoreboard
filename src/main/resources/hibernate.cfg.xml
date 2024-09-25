@@ -11,11 +11,8 @@
         <property name="hibernate.connection.password">postgres</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hbm2ddl.auto">create</property>
+        <property name="format_sql">true</property>
         <mapping class="org.tomato.tennismatchscoreboardweb.models.Player"/>
         <mapping class="org.tomato.tennismatchscoreboardweb.models.Match"/>
-
-
-
-        <!-- Отображение сущностей -->
     </session-factory>
 </hibernate-configuration>
