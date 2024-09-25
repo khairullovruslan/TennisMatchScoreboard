@@ -1,4 +1,4 @@
-package org.tomato.tennismatchscoreboardweb.servlets;
+package org.tomato.tennismatchscoreboardweb.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,10 +11,9 @@ import org.tomato.tennismatchscoreboardweb.services.MatchesService;
 import java.io.IOException;
 import java.util.List;
 
-///matches?page=$page_number&filter_by_player_name=$player_name
 @WebServlet("/matches")
 public class MatchesServlet  extends HttpServlet {
-    private final MatchesService matchesService = new MatchesService();
+    private final MatchesService matchesService =  MatchesService.getInstance();
     private final int PAGE_SIZE = 10;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

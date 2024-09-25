@@ -9,6 +9,16 @@ import org.tomato.tennismatchscoreboardweb.util.HibernateUtil;
 import java.util.List;
 
 public class MatchDao implements BaseDao<Match> {
+    private final static MatchDao INSTANCE = new MatchDao();
+
+    private MatchDao(){
+
+    }
+
+    public static MatchDao getInstance() {
+        return INSTANCE;
+    }
+
     @Override
     public Match findById(long id, Session session) {
         return null;

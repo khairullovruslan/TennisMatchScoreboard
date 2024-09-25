@@ -11,9 +11,18 @@ import org.tomato.tennismatchscoreboardweb.util.HibernateUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerService {
-    private final PlayerDao playerDao = new PlayerDao();
+    private final PlayerDao playerDao = PlayerDao.getInstance();
+    private final static PlayerService INSTANCE = new PlayerService();
+    private PlayerService(){
+        
+    }
+
+    public static PlayerService getInstance() {
+        return INSTANCE;
+    }
 
     public UUID generateMatch(String name1, String name2){
         Transaction transaction = null;
@@ -56,10 +65,7 @@ public class PlayerService {
                     .score2(score2)
                     .build();
             UUID uuid = UUID.randomUUID();
-            if (MatchScore.scores == null){
-                MatchScore.scores = new HashMap<>();
-            }
-            MatchScore.scores.put(uuid, matchScore);
+            MatchScore.addMatch(uuid, matchScore);
             return uuid;
 
 

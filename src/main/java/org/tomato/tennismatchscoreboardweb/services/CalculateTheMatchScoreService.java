@@ -6,7 +6,15 @@ import org.tomato.tennismatchscoreboardweb.models.MatchScore;
 import org.tomato.tennismatchscoreboardweb.models.Score;
 
 public class CalculateTheMatchScoreService {
-    private final MatchDao matchDao = new MatchDao();
+    private final static CalculateTheMatchScoreService INSTANCE = new CalculateTheMatchScoreService();
+    private CalculateTheMatchScoreService(){
+    }
+
+    public static CalculateTheMatchScoreService getInstance() {
+        return INSTANCE;
+    }
+
+    private final MatchDao matchDao = MatchDao.getInstance();
     public boolean calculate(MatchScore matchScore, String winner){
         Score score1 = matchScore.getScore1();
         Score score2 = matchScore.getScore2();

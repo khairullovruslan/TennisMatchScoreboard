@@ -7,6 +7,15 @@ import org.tomato.tennismatchscoreboardweb.util.HibernateUtil;
 import java.util.List;
 
 public class PlayerDao implements BaseDao<Player> {
+    private final static PlayerDao INSTANCE = new PlayerDao();
+    private PlayerDao(){
+
+    }
+
+    public static PlayerDao getInstance() {
+        return INSTANCE;
+    }
+
     @Override
     public Player findById(long id, Session session) {
         return session.get(Player.class, id);

@@ -1,4 +1,4 @@
-package org.tomato.tennismatchscoreboardweb.servlets;
+package org.tomato.tennismatchscoreboardweb.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @WebServlet("/new-match")
 public class NewMatchServlet extends HttpServlet {
-    private  final PlayerService playerService = new PlayerService();
+    private  final PlayerService playerService = PlayerService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

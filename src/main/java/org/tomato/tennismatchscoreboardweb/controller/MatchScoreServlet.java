@@ -1,11 +1,10 @@
-package org.tomato.tennismatchscoreboardweb.servlets;
+package org.tomato.tennismatchscoreboardweb.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.tomato.tennismatchscoreboardweb.models.Match;
 import org.tomato.tennismatchscoreboardweb.models.MatchScore;
 import org.tomato.tennismatchscoreboardweb.services.CalculateTheMatchScoreService;
 import org.tomato.tennismatchscoreboardweb.services.PlayerService;
@@ -15,7 +14,7 @@ import java.util.UUID;
 
 @WebServlet("/match-score")
 public class MatchScoreServlet extends HttpServlet {
-    private final CalculateTheMatchScoreService calculateTheMatchScoreService = new CalculateTheMatchScoreService();
+    private final CalculateTheMatchScoreService calculateTheMatchScoreService =  CalculateTheMatchScoreService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -26,12 +25,7 @@ public class MatchScoreServlet extends HttpServlet {
         }
         try {
             UUID uuid = UUID.fromString(param);
-            System.out.println(MatchScore.scores);
-            if (MatchScore.scores == null){
-                resp.sendError(404, "Матч не был найден");
-                return;
-            }
-            MatchScore matchScore = MatchScore.scores.getOrDefault(uuid, null);
+            MatchScore matchScore = MatchScore.getMatch(uuid);
             if (matchScore == null){
                 resp.sendError(404, "Матч не был найден");
                 return;
@@ -54,20 +48,19 @@ public class MatchScoreServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String param = req.getParameter("uuid");
         String winner = req.getParameter("winner");
-        System.out.println(new PlayerService().playerList());
         if (param == null || winner == null){
             resp.sendError(400, "Отсуствуют необходимые параметры");
             return;
         }
         try {
             UUID uuid = UUID.fromString(param);
-            MatchScore matchScore = MatchScore.scores.get(uuid);
+            MatchScore matchScore = MatchScore.getMatch(uuid);
             boolean isEnd = calculateTheMatchScoreService.calculate(matchScore, winner);
             if (isEnd){
                 req.setAttribute("winner", matchScore.getMatch().getWinner().getName());
                 req.setAttribute("count1", matchScore.getScore1().getCountSets());
                 req.setAttribute("count2", matchScore.getScore2().getCountSets());
-                MatchScore.scores.remove(uuid);
+                MatchScore.removeMatch(uuid);
                 req.getRequestDispatcher("WEB-INF/match-end.jsp").forward(req, resp);
             }
             else{

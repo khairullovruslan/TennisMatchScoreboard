@@ -6,7 +6,16 @@ import org.tomato.tennismatchscoreboardweb.models.Match;
 import java.util.List;
 
 public class MatchesService {
-    private final MatchDao matchDao = new MatchDao();
+    private final static MatchesService INSTANCE = new MatchesService();
+    private MatchesService(){
+
+    }
+
+    public static MatchesService getInstance() {
+        return INSTANCE;
+    }
+
+    private final MatchDao matchDao = MatchDao.getInstance();
 
     public List<Match> findAll(int page, int pageSize){
        return matchDao.findAll(page, pageSize);
