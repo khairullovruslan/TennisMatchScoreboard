@@ -63,6 +63,10 @@ public class MatchScoreServlet extends HttpServlet {
             return;
         }
         MatchScore matchScore = MatchScore.getMatch(uuid);
+        if (matchScore == null){
+            resp.sendError(404, "Матч не найден");
+            return;
+        }
         boolean isEnd = calculateTheMatchScoreService.calculate(matchScore, winner);
         if (isEnd) {
             req.setAttribute("winner", matchScore.getMatch().getWinner().getName());
