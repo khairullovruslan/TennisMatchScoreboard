@@ -1,8 +1,6 @@
 package org.tomato.tennismatchscoreboardweb.util;
-import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.tomato.tennismatchscoreboardweb.models.Match;
 import org.tomato.tennismatchscoreboardweb.models.Player;
