@@ -16,76 +16,63 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PlayerService {
     private final PlayerDao playerDao = PlayerDao.getInstance();
     private final static PlayerService INSTANCE = new PlayerService();
-    private PlayerService(){
-        
+
+    private PlayerService() {
+
     }
 
     public static PlayerService getInstance() {
         return INSTANCE;
     }
 
-    public UUID generateMatch(String name1, String name2){
-        Transaction transaction = null;
-        var sessionFactory = HibernateUtil.getSessionFactory();
-        try (var session = sessionFactory.openSession();){
-            transaction = session.beginTransaction();
+    public UUID generateMatch(String name1, String name2) {
+        Player player1 = buildPlayer(name1);
+        Player player2 = buildPlayer(name2);
 
-            Player player1 = playerDao.findByName(name1, session);
-            Player player2 = playerDao.findByName(name2, session);
-            if (player1 == null){
-                player1 = playerDao.save(buildPlayer(name1), session);
-            }
-            if (player2 == null){
-                player2 = playerDao.save(buildPlayer(name2), session);
-            }
+        Score score1 = Score
+                .builder()
+                .countGames(0)
+                .points(0)
+                .countSets(0)
+                .build();
 
-            transaction.commit();
-            Score score1 = Score
-                    .builder()
-                    .countGames(0)
-                    .points(0)
-                    .countSets(0)
-                    .build();
+        Score score2 = Score
+                .builder()
+                .countGames(0)
+                .points(0)
+                .countSets(0)
+                .build();
 
-            Score score2 = Score
-                    .builder()
-                    .countGames(0)
-                    .points(0)
-                    .countSets(0)
-                    .build();
+        Match match = Match
+                .builder()
+                .player1(player1)
+                .player2(player2).build();
+        MatchScore matchScore = MatchScore
+                .builder()
+                .match(match)
+                .score1(score1)
+                .score2(score2)
+                .build();
+        UUID uuid = UUID.randomUUID();
+        MatchScore.addMatch(uuid, matchScore);
+        return uuid;
 
-            Match match = Match
-                    .builder()
-                    .player1(player1)
-                    .player2(player2).build();
-            MatchScore matchScore = MatchScore
-                    .builder()
-                    .match(match)
-                    .score1(score1)
-                    .score2(score2)
-                    .build();
-            UUID uuid = UUID.randomUUID();
-            MatchScore.addMatch(uuid, matchScore);
-            return uuid;
-
-
-        }
-        catch (Exception e){
-            if (transaction != null) {
-                transaction.rollback();
-            }
-        }
-        return null;
 
     }
-    public List<Player> playerList(){
-        return playerDao.findAll();
-    }
 
-    private Player buildPlayer(String name){
-        return Player
+
+
+    private Player buildPlayer(String name) {
+        Player player = Player
                 .builder()
                 .name(name)
                 .build();
+        try {
+            return playerDao.save(player);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return playerDao.findByName(name);
+        }
     }
 }
