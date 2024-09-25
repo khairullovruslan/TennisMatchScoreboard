@@ -29,13 +29,6 @@ public class MatchesServlet  extends HttpServlet {
             matchList = matchesService.findAllWithName(page, PAGE_SIZE, nameParam);
         }
 
-        System.out.println(matchList.size());
-        for (Match match: matchList){
-            System.out.println(match.getPlayer1());
-            System.out.println(match.getPlayer2());
-            System.out.println(match.getWinner());
-            System.out.println();
-        }
         req.setAttribute("matches", matchList);
         req.getRequestDispatcher("WEB-INF/all-matches.jsp").forward(req, resp);
 
