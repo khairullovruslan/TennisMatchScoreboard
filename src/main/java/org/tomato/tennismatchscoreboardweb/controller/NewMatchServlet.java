@@ -20,7 +20,7 @@ public class NewMatchServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String name1 = req.getParameter("name");
         String name2 = req.getParameter("name2");
         if (name1 == null || name2 == null){
