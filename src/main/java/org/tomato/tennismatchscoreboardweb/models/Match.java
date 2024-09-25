@@ -1,6 +1,7 @@
 package org.tomato.tennismatchscoreboardweb.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,6 @@ public class Match {
 
     @ManyToOne
     private Player player2;
-
     @ManyToOne
     private Player winner;
 
